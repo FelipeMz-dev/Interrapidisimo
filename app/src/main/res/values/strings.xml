@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Interrapidísimo</string>
+    <string name="copy_previous_version">Hay una nueva versión disponible</string>
+    <string name="copy_newer_version">La versión local es más reciente que la remota</string>
 </resources>

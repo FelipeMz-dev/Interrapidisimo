@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Interrapidísimo"
+rootProject.name = "Interrapidisimo"
 include(":app")
  
