@@ -9,7 +9,7 @@ import com.felipemz.interrapidsimo.data.db.entity.UserEntity
 @Dao
 interface UserDao {
 
-    @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertUser(user: UserEntity)
 
     @Query("SELECT * FROM user_table LIMIT 1")

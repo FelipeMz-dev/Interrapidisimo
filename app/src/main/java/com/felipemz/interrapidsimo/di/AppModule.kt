@@ -2,15 +2,26 @@ package com.felipemz.interrapidsimo.di
 
 import android.content.Context
 import androidx.room.Room
+import com.felipemz.interrapidsimo.data.api.LocationApi
 import com.felipemz.interrapidsimo.data.api.LoginApi
+import com.felipemz.interrapidsimo.data.api.TableApi
 import com.felipemz.interrapidsimo.data.api.VersionApi
 import com.felipemz.interrapidsimo.data.db.AppDatabase
+import com.felipemz.interrapidsimo.data.db.dao.TableDao
 import com.felipemz.interrapidsimo.data.db.dao.UserDao
+import com.felipemz.interrapidsimo.data.repository.LocationsRepositoryImpl
+import com.felipemz.interrapidsimo.data.repository.TableRepositoryImpl
 import com.felipemz.interrapidsimo.data.repository.UserRepositoryImpl
+import com.felipemz.interrapidsimo.data.usecase.GetLocationsUseCaseImpl
+import com.felipemz.interrapidsimo.data.usecase.GetTablesUseCaseImpl
 import com.felipemz.interrapidsimo.data.usecase.GetUserAccountUseCaseImpl
 import com.felipemz.interrapidsimo.data.usecase.LoginUseCaseImpl
 import com.felipemz.interrapidsimo.data.usecase.ValidateVersionUseCaseImpl
+import com.felipemz.interrapidsimo.domain.repository.LocationsRepository
+import com.felipemz.interrapidsimo.domain.repository.TableRepository
 import com.felipemz.interrapidsimo.domain.repository.UserRepository
+import com.felipemz.interrapidsimo.domain.usecase.GetLocationsUseCase
+import com.felipemz.interrapidsimo.domain.usecase.GetTablesUseCase
 import com.felipemz.interrapidsimo.domain.usecase.GetUserAccountUseCase
 import com.felipemz.interrapidsimo.domain.usecase.LoginUseCase
 import com.felipemz.interrapidsimo.domain.usecase.ValidateVersionUseCase
@@ -82,5 +93,38 @@ object AppModule {
     @Provides
     fun provideGetUserUseCase(userRepository: UserRepository): GetUserAccountUseCase {
         return GetUserAccountUseCaseImpl(userRepository)
+    }
+
+    @Provides
+    fun provideTablaApi(retrofit: Retrofit): TableApi {
+        return retrofit.create(TableApi::class.java)
+    }
+
+    @Provides
+    fun provideTableDao(db: AppDatabase): TableDao = db.tableDao()
+
+    @Provides
+    fun provideTableRepository(api: TableApi, dao: TableDao): TableRepository {
+        return TableRepositoryImpl(api, dao)
+    }
+
+    @Provides
+    fun provideGetTablesUseCase(tableRepository: TableRepository): GetTablesUseCase {
+        return GetTablesUseCaseImpl(tableRepository)
+    }
+
+    @Provides
+    fun provideLocationsApi(retrofit: Retrofit): LocationApi {
+        return retrofit.create(LocationApi::class.java)
+    }
+
+    @Provides
+    fun provideLocationsRepository(api: LocationApi): LocationsRepository {
+        return LocationsRepositoryImpl(api)
+    }
+
+    @Provides
+    fun provideLocationsUseCase(locationsRepository: LocationsRepository): GetLocationsUseCase {
+        return GetLocationsUseCaseImpl(locationsRepository)
     }
 }
