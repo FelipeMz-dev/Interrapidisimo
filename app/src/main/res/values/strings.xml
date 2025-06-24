@@ -7,4 +7,5 @@
     <string name="copy_password">Contraseña</string>
     <string name="copy_login_title">Iniciar sesión</string>
     <string name="copy_error_credential">Usuario o contraseña incorrectos</string>
+    <string name="updated">Updated</string>
 </resources>

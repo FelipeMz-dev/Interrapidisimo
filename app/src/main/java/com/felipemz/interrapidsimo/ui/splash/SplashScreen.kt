@@ -31,7 +31,7 @@ fun SplashScreen(
 
     LaunchedEffect(state.versionSuccess) {
         if (state.versionSuccess) {
-            viewModel.handleIntent(SplashIntent.SubmitLogin)
+            viewModel.handleIntent(SplashIntent.VerifyLogin)
         }
     }
 

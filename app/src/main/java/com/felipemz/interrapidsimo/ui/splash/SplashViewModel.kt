@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.felipemz.interrapidsimo.BuildConfig
 import com.felipemz.interrapidsimo.R
 import com.felipemz.interrapidsimo.domain.usecase.GetUserAccountUseCase
-import com.felipemz.interrapidsimo.domain.usecase.LoginUseCase
 import com.felipemz.interrapidsimo.domain.usecase.ValidateVersionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,7 +26,7 @@ class SplashViewModel @Inject constructor(
     fun handleIntent(intent: SplashIntent) {
         when (intent) {
             is SplashIntent.ValidateVersion -> validateVersion()
-            is SplashIntent.SubmitLogin -> loginDefault()
+            is SplashIntent.VerifyLogin -> verifyLogin()
             else -> Unit
         }
     }
@@ -61,7 +60,7 @@ class SplashViewModel @Inject constructor(
         }
     }
 
-    private fun loginDefault() {
+    private fun verifyLogin() {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
 
@@ -82,5 +81,6 @@ class SplashViewModel @Inject constructor(
 
 enum class ResultMessageType(val message: Int) {
     NEW_VERSION(R.string.copy_previous_version),
+    UPDATED(R.string.updated),
     LOCAL_NEWER(R.string.copy_newer_version)
 }

@@ -29,27 +29,25 @@ class LoginViewModel @Inject constructor(
     private fun login(
         user: String,
         pass: String
-    ) {
-        viewModelScope.launch {
-            _state.update { it.copy(isLoading = true) }
+    ) = viewModelScope.launch {
+        _state.update { it.copy(isLoading = true) }
 
-            try {
-                val result = loginUseCase(user.trim(), pass.trim())
-                _state.update {
-                    it.copy(
-                        isLoading = false,
-                        success = result,
-                        credentialsError = !result
-                    )
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                _state.update {
-                    it.copy(
-                        isLoading = false,
-                        error = "Error ${e.message ?: "unknown"}"
-                    )
-                }
+        try {
+            val result = loginUseCase(user.trim(), pass.trim())
+            _state.update {
+                it.copy(
+                    isLoading = false,
+                    success = result,
+                    credentialsError = !result
+                )
+            }
+        } catch (e: Exception) {
+            _state.update {
+                it.copy(
+                    isLoading = false,
+                    success = false,
+                    error = "Error ${e.message ?: "unknown"}"
+                )
             }
         }
     }
