@@ -55,7 +55,7 @@ El patrón de presentación es **MVI (Model-View-Intent)**:
 1. Clona el repositorio:
 ```bash
 git clone https://github.com/tuusuario/prueba-tecnica-interrapidisimo.git
-
+```
 ##👤 Autor
 Felipe Méndez
 [GitHub](https://github.com/FelipeMz-dev) • [LinkedIn](https://www.linkedin.com/in/juan-felipe-mendez-carmona-3ab104242/)
