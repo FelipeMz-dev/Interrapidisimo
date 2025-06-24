@@ -4,5 +4,6 @@ data class SplashState(
     val isLoading: Boolean = false,
     val message: ResultMessageType? = null,
     val error: String? = null,
-    val success: Boolean = false
+    val versionSuccess: Boolean = false,
+    val hasUserLogged: Boolean? = null
 )

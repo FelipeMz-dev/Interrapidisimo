@@ -62,6 +62,9 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
     implementation(libs.okhttp.logging.interceptor)
+    //Room
+    implementation(libs.room.runtime)
+    kapt(libs.room.compiler)
     //testing
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)

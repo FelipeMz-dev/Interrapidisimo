@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.felipemz.interrapidsimo.BuildConfig
-import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(
@@ -30,9 +29,15 @@ fun SplashScreen(
         viewModel.handleIntent(SplashIntent.ValidateVersion)
     }
 
-    LaunchedEffect(state.success) {
-        if (state.success) {
-            navController.navigate("home") {
+    LaunchedEffect(state.versionSuccess) {
+        if (state.versionSuccess) {
+            viewModel.handleIntent(SplashIntent.VerifyLogin)
+        }
+    }
+
+    LaunchedEffect(state.hasUserLogged) {
+        state.hasUserLogged?.let {
+            navController.navigate(if (it) "home" else "login") {
                 popUpTo("splash") { inclusive = true }
             }
         }

@@ -2,6 +2,8 @@ package com.felipemz.interrapidsimo
 
 import app.cash.turbine.turbineScope
 import com.felipemz.interrapidsimo.data.usecase.ValidateVersionUseCaseImpl
+import com.felipemz.interrapidsimo.domain.model.UserAccount
+import com.felipemz.interrapidsimo.domain.usecase.GetUserAccountUseCase
 import com.felipemz.interrapidsimo.ui.splash.ResultMessageType
 import com.felipemz.interrapidsimo.ui.splash.SplashIntent
 import com.felipemz.interrapidsimo.ui.splash.SplashViewModel
@@ -23,13 +25,15 @@ class SplashViewModelTest {
     @get:Rule
     val coroutineRule = MainDispatcherRule()
 
-    private lateinit var useCase: ValidateVersionUseCaseImpl
+    private lateinit var validateUseCase: ValidateVersionUseCaseImpl
+    private lateinit var accountUseCase: GetUserAccountUseCase
     private lateinit var viewModel: SplashViewModel
 
     @Before
     fun setUp() {
-        useCase = mockk()
-        viewModel = SplashViewModel(useCase)
+        validateUseCase = mockk()
+        accountUseCase = mockk()
+        viewModel = SplashViewModel(validateUseCase, accountUseCase)
     }
 
     @Test
@@ -42,7 +46,7 @@ class SplashViewModelTest {
         )
 
         for ((remoteVersion, expectedType) in scenarios) {
-            every { runBlocking { useCase.invoke() } } returns remoteVersion
+            every { runBlocking { validateUseCase.invoke() } } returns remoteVersion
 
             turbineScope {
                 val stateFlow = viewModel.state.testIn(this)
@@ -68,7 +72,7 @@ class SplashViewModelTest {
     fun `emit error state when exception is thrown`() = runTest {
         // Given
         val messageError = "Network error"
-        every { runBlocking { useCase.invoke() } } throws Exception(messageError)
+        every { runBlocking { validateUseCase.invoke() } } throws Exception(messageError)
 
         turbineScope {
             val stateFlow = viewModel.state.testIn(this)
@@ -83,6 +87,31 @@ class SplashViewModelTest {
 
             assertFalse(errorState.isLoading)
             assertTrue(errorState.error?.contains(messageError) == true)
+
+            stateFlow.cancel()
+        }
+    }
+
+    @Test
+    fun `emit hasUserLogged state when user account is retrieved`() = runTest {
+        // Given
+        val userAccount = UserAccount("testId", "testUser", "testName")
+        every { runBlocking { accountUseCase.invoke() } } returns userAccount
+
+        turbineScope {
+            val stateFlow = viewModel.state.testIn(this)
+
+            // When
+            viewModel.handleIntent(SplashIntent.VerifyLogin)
+
+            // Then
+            stateFlow.awaitItem()
+            val loadingState = stateFlow.awaitItem()
+            assertTrue(loadingState.isLoading)
+
+            val successState = stateFlow.awaitItem()
+            assertFalse(successState.isLoading)
+            assertTrue(successState.hasUserLogged == true)
 
             stateFlow.cancel()
         }
