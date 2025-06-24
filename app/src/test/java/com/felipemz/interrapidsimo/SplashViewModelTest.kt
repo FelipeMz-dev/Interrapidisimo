@@ -61,7 +61,7 @@ class SplashViewModelTest {
 
                 val successState = stateFlow.awaitItem()
                 assertFalse(successState.isLoading)
-                assertEquals(expectedType.message, successState.message)
+                assertEquals(expectedType, successState.message)
 
                 stateFlow.cancel()
             }

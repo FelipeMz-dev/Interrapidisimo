@@ -42,8 +42,9 @@ class SplashViewModel @Inject constructor(
                 remoteVersion == localVersion -> {
                     _state.update {
                         it.copy(
+                            versionSuccess = true,
                             isLoading = false,
-                            versionSuccess = true
+                            message = ResultMessageType.UPDATED
                         )
                     }
                     return@launch
